@@ -18,7 +18,7 @@ app.use(express.json());
 app.use(express.static('public'));
 
 async function analizzaPastoConGemini(testoPasto) {
-    const prompt = `Dato il seguente testo che descrive un pasto in italiano... (il resto del prompt rimane uguale)`;
+    const prompt = `Dato il seguente testo che descrive un pasto in italiano, esegui questi passaggi: 1. Estrai ogni alimento e la sua quantità. 2. Per ogni alimento, fornisci una stima dei seguenti valori nutrizionali: calorie (calories), proteine in grammi (protein_g), grassi totali in grammi (fat_total_g) e carboidrati totali in grammi (carbohydrates_total_g). Rispondi ESCLUSIVAMENTE con un oggetto JSON valido... (Il resto del prompt rimane uguale)`;
     try {
         const result = await model.generateContent(prompt);
         const response = await result.response;
@@ -31,12 +31,14 @@ async function analizzaPastoConGemini(testoPasto) {
     }
 }
 
+// === FUNZIONE CORRETTA ===
 async function salvaPastoNelDB(alimento) {
     const sql = `INSERT INTO log_alimentare (nome_alimento, quantita, calories, protein_g, fat_total_g, carbohydrates_total_g) VALUES ($1, $2, $3, $4, $5, $6)`;
     const values = [alimento.nome, alimento.quantita, alimento.nutrizione.calories || 0, alimento.nutrizione.protein_g || 0, alimento.nutrizione.fat_total_g || 0, alimento.nutrizione.carbohydrates_total_g || 0];
     try {
-        const { rowCount } = await dbPool.query(sql, values);
-        console.log(`- Salvato nel DB: ${alimento.nome}. Righe modificate: ${rowCount}`);
+        // La correzione è qui: leggiamo il risultato completo e poi accediamo a .rowCount
+        const result = await dbPool.query(sql, values);
+        console.log(`- Salvato nel DB: ${alimento.nome}. Righe modificate: ${result.rowCount}`);
         return { success: true };
     } catch (dbError) {
         console.error("!!! ERRORE DURANTE IL SALVATAGGIO:", dbError.message);
