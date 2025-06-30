@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Il Mio Diario Fitness</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <h1>Diario Fitness</h1>
+
+    <div class="container">
+        <h2>Registra Pesata</h2>
+        <p><em>Sezione in costruzione...</em></p>
+    </div>
+
+    <div class="container">
+        <h2>Log Alimentare con Gemini</h2>
+        <textarea id="foodInput" rows="4" placeholder="Es: Ho mangiato un piatto di pasta al pesto e una mela..."></textarea>
+        <button id="submitFood">Registra Pasto</button>
+    </div>
+
+    <div class="container">
+        <h2>Storico Pasti Recenti</h2>
+        <table id="historyTable">
+            <thead>
+                <tr>
+                    <th>Data</th>
+                    <th>Alimento</th>
+                    <th>Quantità</th>
+                    <th>Calorie (stimate)</th>
+                </tr>
+            </thead>
+            <tbody id="historyTableBody">
+                </tbody>
+        </table>
+    </div>
+
+    <script src="app.js"></script>
+    
+</body>
+</html>
