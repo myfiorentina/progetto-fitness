@@ -44,40 +44,6 @@ async function salvaPastoNelDB(alimento) {
     }
 }
 
-// =================================================================
-// === NUOVA ROTTA SPECIALE PER IL SETUP DEL DATABASE ===
-app.get('/api/setup-database', async (req, res) => {
-  const createTablesSql = `
-    CREATE TABLE IF NOT EXISTS log_alimentare (
-      id SERIAL PRIMARY KEY,
-      data_pasto TIMESTAMP NOT NULL DEFAULT NOW(),
-      nome_alimento VARCHAR(255) NOT NULL,
-      quantita VARCHAR(100) NOT NULL,
-      calories REAL NOT NULL,
-      protein_g REAL NOT NULL,
-      fat_total_g REAL NOT NULL,
-      carbohydrates_total_g REAL NOT NULL
-    );
-
-    CREATE TABLE IF NOT EXISTS pesate (
-      id SERIAL PRIMARY KEY,
-      data_pesata TIMESTAMP NOT NULL DEFAULT NOW(),
-      peso_kg REAL NOT NULL,
-      body_fat_percentage REAL,
-      total_body_water_percentage REAL,
-      muscle_mass_percentage REAL
-    );
-  `;
-  try {
-    await dbPool.query(createTablesSql);
-    res.status(200).send('<h1>Tabelle create con successo!</h1><p>Ora puoi tornare alla pagina principale. Per sicurezza, rimuovi questo endpoint dal codice sorgente.</p>');
-  } catch (error) {
-    console.error("Errore durante la creazione delle tabelle:", error);
-    res.status(500).send('<h1>Errore durante la creazione delle tabelle.</h1><p>Controlla i log del server.</p>');
-  }
-});
-// =================================================================
-
 
 // --- Rotte API Principali ---
 app.post('/api/process-food', async (req, res) => {
